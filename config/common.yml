@@ -1,0 +1,105 @@
+services:
+    _defaults:
+        public: true
+
+    BelVG\ProductSubscription\ReadModel\AbstractReadModel:
+        class: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        abstract: true
+        arguments:
+            - '@doctrine.dbal.default_connection'
+            - '%database_prefix%'
+
+    BelVG\ProductSubscription\ReadModel\CartProductReadModel:
+        class: BelVG\ProductSubscription\ReadModel\CartProductReadModel
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        public: true
+
+    BelVG\ProductSubscription\ReadModel\LoyaltyReadModel:
+        class: BelVG\ProductSubscription\ReadModel\LoyaltyReadModel
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        public: true
+
+    BelVG\ProductSubscription\ReadModel\CarrierReadModel:
+        class: BelVG\ProductSubscription\ReadModel\CarrierReadModel
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        public: true
+
+    BelVG\ProductSubscription\ReadModel\PeriodicityReadModel:
+        class: BelVG\ProductSubscription\ReadModel\PeriodicityReadModel
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        public: true
+
+    BelVG\ProductSubscription\ReadModel\SubscriptionCartProductReadModel:
+        class: BelVG\ProductSubscription\ReadModel\SubscriptionCartProductReadModel
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        public: true
+
+    BelVG\ProductSubscription\ReadModel\SubscriptionReadModel:
+        class: BelVG\ProductSubscription\ReadModel\SubscriptionReadModel
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        public: true
+
+    BelVG\ProductSubscription\ReadModel\SubscriptionAvailabilityReadModel:
+        class: BelVG\ProductSubscription\ReadModel\SubscriptionAvailabilityReadModel
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        public: true
+
+    BelVG\ProductSubscription\ReadModel\ProductReadModel:
+        class: BelVG\ProductSubscription\ReadModel\ProductReadModel
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        public: true
+
+    BelVG\ProductSubscription\Service\SubscriptionService:
+        class: BelVG\ProductSubscription\Service\SubscriptionService
+        arguments:
+            - '@BelVG\ProductSubscription\ReadModel\SubscriptionCartProductReadModel'
+            - '@BelVG\ProductSubscription\ReadModel\CartProductReadModel'
+            - '@doctrine.orm.entity_manager'
+            - '@BelVG\ProductSubscription\Service\Cart\CartCloneService'
+
+    BelVG\ProductSubscription\Service\SubscriptionAddressService:
+        class: BelVG\ProductSubscription\Service\SubscriptionAddressService
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    BelVG\ProductSubscription\Service\Cart\CartCloneService:
+        class: BelVG\ProductSubscription\Service\Cart\CartCloneService
+
+    BelVG\ProductSubscription\Service\SubscriptionOrderCartService:
+        class: BelVG\ProductSubscription\Service\SubscriptionOrderCartService
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@BelVG\ProductSubscription\Service\Cart\CartCloneService'
+
+    BelVG\ProductSubscription\Service\GCOrderFormService:
+        class: BelVG\ProductSubscription\Service\GCOrderFormService
+        arguments:
+            - '@BelVG\ProductSubscription\ReadModel\SubscriptionAvailabilityReadModel'
+
+    BelVG\ProductSubscription\Command\CronCommand:
+        class: BelVG\ProductSubscription\Command\CronCommand
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@BelVG\ProductSubscription\Service\SubscriptionOrderCartService'
+            - '@BelVG\ProductSubscription\ReadModel\SubscriptionReadModel'
+            - '@BelVG\ProductSubscription\Service\Cart\CartRuleService'
+            - '@BelVG\ProductSubscription\Interfaces\Command\Report\ReportSenderInterface'
+        tags:
+            - { name: 'console.command' }
+
+    BelVG\ProductSubscription\Service\Cart\CartRuleService:
+        class: BelVG\ProductSubscription\Service\Cart\CartRuleService
+        parent: BelVG\ProductSubscription\ReadModel\AbstractReadModel
+        arguments:
+            - '@BelVG\ProductSubscription\Service\Cart\CartCloneService'
+        public: true
+
+    BelVG\ProductSubscription\Interfaces\Command\Report\ReportSenderInterface:
+        class: BelVG\ProductSubscription\Service\Command\Report\Sender\MailSender
+        arguments:
+            - '@BelVG\ProductSubscription\Interfaces\Command\Report\Renderer\ReportItemsRendererInterface'
+
+    BelVG\ProductSubscription\Interfaces\Command\Report\Renderer\ReportItemsRendererInterface:
+        class: BelVG\ProductSubscription\Service\Command\Report\Renderer\MailReportItemsRenderer
+        arguments:
+            - '@service_container'

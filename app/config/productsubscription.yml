@@ -1,0 +1,56 @@
+services:
+    _defaults:
+        public: true
+
+    BelVG\ProductSubscription\Command\Import\ImportCsvCommand:
+        class: BelVG\ProductSubscription\Command\Import\ImportCsvCommand
+        arguments:
+            - '@logger'
+        tags:
+            - { name: 'console.command' }
+
+    BelVG\ProductSubscription\Service\Csv\AbstractHelper:
+        class: BelVG\ProductSubscription\Service\Csv\AbstractHelper
+        abstract: true
+        arguments:
+            - '@prestashop.core.import.csv_file_reader'
+            - '@doctrine.orm.entity_manager'
+
+    BelVG\ProductSubscription\Service\Csv\PeriodicityHelper:
+        class: BelVG\ProductSubscription\Service\Csv\PeriodicityHelper
+        parent: BelVG\ProductSubscription\Service\Csv\AbstractHelper
+        public: true
+
+    BelVG\ProductSubscription\Service\Csv\LoyaltyHelper:
+        class: BelVG\ProductSubscription\Service\Csv\LoyaltyHelper
+        parent: BelVG\ProductSubscription\Service\Csv\AbstractHelper
+        arguments:
+            - '@BelVG\ProductSubscription\ReadModel\LoyaltyReadModel'
+        public: true
+
+    BelVG\ProductSubscription\Service\Csv\AvailabilityHelper:
+        class: BelVG\ProductSubscription\Service\Csv\AvailabilityHelper
+        parent: BelVG\ProductSubscription\Service\Csv\AbstractHelper
+        public: true
+
+    BelVG\ProductSubscription\Service\Csv\SubscriptionHelper:
+        class: BelVG\ProductSubscription\Service\Csv\SubscriptionHelper
+        parent: BelVG\ProductSubscription\Service\Csv\AbstractHelper
+        arguments:
+            - '@BelVG\ProductSubscription\ReadModel\CarrierReadModel'
+        public: true
+
+    BelVG\ProductSubscription\Service\Csv\SubscriptionProductHelper:
+        class: BelVG\ProductSubscription\Service\Csv\SubscriptionProductHelper
+        parent: BelVG\ProductSubscription\Service\Csv\AbstractHelper
+        arguments:
+            - '@BelVG\ProductSubscription\Service\Cart\CartCloneService'
+            - '@BelVG\ProductSubscription\ReadModel\ProductReadModel'
+        public: true
+
+
+
+        BelVG\ProductSubscription\Service\Stock\StockManager:
+            class: BelVG\ProductSubscription\Service\Stock\StockManager
+            parent: PrestaShop\PrestaShop\Core\Stock\StockManager
+            public: true

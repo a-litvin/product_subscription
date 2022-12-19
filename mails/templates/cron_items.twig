@@ -1,0 +1,65 @@
+{% block autoships %}
+    {% block successful %}
+        {% if successful|length %}
+            <table class="main-table" width="100%" style="font-size: 14px;margin-bottom: 30px;">
+                <caption style="margin-bottom: 16px;font-size: 16px;">{{ 'Successeful: %count%'|trans({'%count%': successful|length,}, 'Emails.Body', locale)|raw }}</caption>
+                <thead style="border-bottom: solid 1px #e4e4e4;">
+                    <tr style="">
+                        <th align="center" class="titleblock" style="padding: 5px 0;">{{ 'Id'|trans({}, 'Emails.Body', locale)|raw }}</th>
+                        <th align="center" class="titleblock" style="padding: 5px 0;">{{ 'Customer'|trans({}, 'Emails.Body', locale)|raw }}</th>
+                        <th align="center" class="titleblock" style="padding: 5px 0;">{{ 'Title'|trans({}, 'Emails.Body', locale)|raw }}</th>
+                    </tr>
+                </thead>
+                <tbody style="border-bottom: solid 1px #e4e4e4;">
+                {% for subscription in successful %}
+                    <tr style="border-bottom: solid 1px #e4e4e4;">
+                        <td align="center" style="max-width: 100px;padding: 5px 0;">
+                            {{ subscription.id }}
+                        </td>
+                        <td align="center" style="max-width: 100px;padding: 5px 0;">
+                            {{ subscription.customer }}
+                        </td>
+                        <td align="center" style="max-width: 100px;padding: 5px 0;">
+                            {{ subscription.name }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endblock %}
+
+    {% block failed %}
+        {% if failed|length %}
+            <table class="main-table" width="100%" style="font-size: 14px;margin-bottom: 30px;">
+                <caption style="margin-bottom: 16px;font-size: 16px;">{{ 'Failed: %count%'|trans({'%count%': failed|length,}, 'Emails.Body', locale)|raw }}</caption>
+                <thead style="border-bottom: solid 1px #e4e4e4;">
+                    <tr style="">
+                        <th align="center" class="titleblock" style="padding: 5px 0;">{{ 'Id'|trans({}, 'Emails.Body', locale)|raw }}</th>
+                        <th align="center" class="titleblock" style="padding: 5px 0;">{{ 'Customer'|trans({}, 'Emails.Body', locale)|raw }}</th>
+                        <th align="center" class="titleblock" style="padding: 5px 0;">{{ 'Title'|trans({}, 'Emails.Body', locale)|raw }}</th>
+                        <th align="center" class="titleblock" style="padding: 5px 0;">{{ 'Error'|trans({}, 'Emails.Body', locale)|raw }}</th>
+                    </tr>
+                </thead>
+                <tbody style="border-bottom: solid 1px #e4e4e4;">
+                {% for subscription in failed %}
+                    <tr style="border-bottom: solid 1px #e4e4e4;">
+                        <td align="center" style="max-width: 100px;padding: 5px 0;">
+                            {{ subscription.id }}
+                        </td>
+                        <td align="center" style="max-width: 100px;padding: 5px 0;">
+                            {{ subscription.customer }}
+                        </td>
+                        <td align="center" style="max-width: 100px;padding: 5px 0;">
+                            {{ subscription.name }}
+                        </td>
+                        <td align="center" style="max-width: 100px;padding: 5px 0;">
+                            {{ subscription.message }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endblock %}
+{% endblock %}

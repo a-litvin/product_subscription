@@ -1,0 +1,27 @@
+{
+    "name": "belvg/product_subscription",
+    "description": "PrestaShop module productsubscription",
+    "authors": [
+        {
+            "name": "BelVG LLC",
+            "email": "contact@belvg.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "BelVG\\ProductSubscription\\": "src/"
+        },
+        "classmap": [
+            "productsubscription.php"
+        ],
+        "exclude-from-classmap": []
+    },
+    "config": {
+        "preferred-install": "dist",
+        "prepend-autoloader": false
+    },
+    "type": "prestashop-module"
+}

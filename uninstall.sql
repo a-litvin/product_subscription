@@ -1,0 +1,12 @@
+ALTER TABLE PREFIX_subscription DROP FOREIGN KEY FK_Subscription_SubscriptionPeriodicity;
+ALTER TABLE PREFIX_subscription_cart_product DROP FOREIGN KEY FK_SubscriptionCartProduct_SubscriptionPeriodicity;
+ALTER TABLE PREFIX_subscription_payment DROP FOREIGN KEY FK_SubscriptionPayment_Subscription;
+ALTER TABLE PREFIX_subscription_subscription_blocking_reason DROP FOREIGN KEY FK_SubscriptionReason_Subscription;
+ALTER TABLE PREFIX_subscription_subscription_blocking_reason DROP FOREIGN KEY FK_SubscriptionReason_Reason;
+ALTER TABLE PREFIX_subscription_product DROP FOREIGN KEY FK_SubscriptionProduct_Subscription;
+ALTER TABLE PREFIX_subscription_product DROP FOREIGN KEY FK_SubscriptionProduct_SubscriptionAvailability;
+ALTER TABLE PREFIX_subscription_history DROP FOREIGN KEY FK_SubscriptionHistory_Subscription;
+
+DROP TABLE IF EXISTS PREFIX_subscription_periodicity, PREFIX_subscription_availability, PREFIX_subscription,
+    PREFIX_subscription_cart_product, PREFIX_subscription_payment, PREFIX_subscription_blocking_reason,
+    PREFIX_subscription_subscription_blocking_reason, PREFIX_subscription_product, PREFIX_subscription_history;
